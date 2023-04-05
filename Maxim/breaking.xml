@@ -5,55 +5,99 @@
 chan continue_driving, move, continue_breaking, break;
 </declaration>
 	<template>
-		<name x="5" y="5">truckMaster</name>
-		<declaration>// Place local declarations here.
-clock wait;</declaration>
-		<location id="id0" x="-204" y="-127">
-			<name x="-214" y="-161">start</name>
+		<name>truckSlave</name>
+		<location id="id0" x="-2278" y="-620">
+			<name x="-2288" y="-654">start</name>
 		</location>
-		<location id="id1" x="-42" y="-8">
-			<name x="-52" y="-42">drive</name>
+		<location id="id1" x="-2023" y="-391">
+			<name x="-2033" y="-425">drive</name>
 		</location>
-		<location id="id2" x="348" y="-8">
-			<name x="338" y="-42">breaking</name>
+		<location id="id2" x="-1640" y="-391">
+			<name x="-1691" y="-374">breaking</name>
 		</location>
 		<init ref="id0"/>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
-			<label kind="synchronisation" x="102" y="-161">continue_driving!</label>
-			<nail x="153" y="-136"/>
+			<label kind="synchronisation" x="-1887" y="-578">continue_driving?</label>
+			<nail x="-1827" y="-552"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id1"/>
+			<label kind="synchronisation" x="-2074" y="-263">continue_driving?</label>
+			<nail x="-1946" y="-272"/>
+			<nail x="-2091" y="-272"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-1538" y="-391">continue_breaking?</label>
+			<nail x="-1547" y="-288"/>
+			<nail x="-1547" y="-467"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-1861" y="-416">break?</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-2159" y="-552">move?</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">truckMaster</name>
+		<declaration>// Place local declarations here.
+clock wait;</declaration>
+		<location id="id3" x="-204" y="-127">
+			<name x="-214" y="-161">start</name>
+		</location>
+		<location id="id4" x="-42" y="-8">
+			<name x="-52" y="-42">drive</name>
+		</location>
+		<location id="id5" x="348" y="-8">
+			<name x="338" y="-42">breaking</name>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="102" y="-161">continue_driving!</label>
+			<nail x="153" y="-136"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id4"/>
 			<label kind="synchronisation" x="-93" y="93">continue_driving!</label>
 			<nail x="51" y="93"/>
 			<nail x="-127" y="93"/>
 		</transition>
 		<transition>
-			<source ref="id2"/>
-			<target ref="id2"/>
+			<source ref="id5"/>
+			<target ref="id5"/>
 			<label kind="synchronisation" x="476" y="0">continue_breaking!</label>
 			<nail x="467" y="93"/>
 			<nail x="467" y="-76"/>
 		</transition>
 		<transition>
-			<source ref="id1"/>
-			<target ref="id2"/>
+			<source ref="id4"/>
+			<target ref="id5"/>
 			<label kind="synchronisation" x="127" y="-25">break!</label>
 		</transition>
 		<transition>
-			<source ref="id0"/>
-			<target ref="id1"/>
+			<source ref="id3"/>
+			<target ref="id4"/>
 			<label kind="synchronisation" x="-186" y="-84">move!</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-truckMaster = truckMaster();
+truckMasterOne = truckMaster();
+truckSlaveOne = truckSlave();
 
 // List one or more processes to be composed into a system.
-system truckMaster;
+system truckMasterOne, truckSlaveOne;
     </system>
 	<queries>
 		<query>
