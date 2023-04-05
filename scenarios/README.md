@@ -1,0 +1,1 @@
+This folder is for the scenarios that can appear at truck plaatoning
