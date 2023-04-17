@@ -88,34 +88,40 @@ bool r = false;</declaration>
 			<source ref="id7"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-280" y="127">delayint == 0</label>
+			<label kind="synchronisation" x="-280" y="110">turnStraight?</label>
 			<nail x="-187" y="119"/>
 		</transition>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id7"/>
 			<label kind="guard" x="-170" y="25">delayint == 0</label>
+			<label kind="synchronisation" x="-170" y="8">turnRight?</label>
 		</transition>
 		<transition>
 			<source ref="id7"/>
 			<target ref="id6"/>
 			<label kind="guard" x="178" y="-76">delayint == 0</label>
+			<label kind="synchronisation" x="187" y="-59">turnLeft?</label>
 			<nail x="178" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id7"/>
 			<label kind="guard" x="25" y="-76">delayint == 0</label>
+			<label kind="synchronisation" x="25" y="-59">turnRight?</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-204" y="-272">delayint == 0</label>
+			<label kind="synchronisation" x="-204" y="-255">turnStraight?</label>
 			<nail x="-178" y="-238"/>
 		</transition>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id6"/>
 			<label kind="guard" x="-161" y="-153">delayint == 0</label>
+			<label kind="synchronisation" x="-153" y="-136">turnLeft?</label>
 		</transition>
 		<transition>
 			<source ref="id4"/>
