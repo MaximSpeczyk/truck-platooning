@@ -240,40 +240,34 @@ fastD = false</label>
 		<transition>
 			<source ref="id8"/>
 			<target ref="id9"/>
-			<label kind="guard" x="187" y="357">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="195" y="331">delayint = 1</label>
 			<nail x="262" y="350"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id8"/>
-			<label kind="guard" x="289" y="221">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="314" y="204">delayint = 2</label>
 		</transition>
 		<transition>
 			<source ref="id8"/>
 			<target ref="id10"/>
-			<label kind="guard" x="603" y="144">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="637" y="170">delayint = 3</label>
 			<nail x="627" y="180"/>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id8"/>
-			<label kind="guard" x="374" y="187">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="391" y="170">delayint = 2</label>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id9"/>
-			<label kind="guard" x="212" y="-51">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="246" y="-34">delayint = 1</label>
 			<nail x="271" y="-7"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id10"/>
-			<label kind="guard" x="289" y="144">l == false &amp;&amp; r == false</label>
 			<label kind="assignment" x="323" y="127">delayint = 3</label>
 		</transition>
 		<transition>
