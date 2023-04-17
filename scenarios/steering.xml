@@ -3,11 +3,149 @@
 <nta>
 	<declaration>// Place global declarations here.</declaration>
 	<template>
-		<name x="5" y="5">Template</name>
+		<name x="5" y="5">truckMaster</name>
 		<declaration>// Place local declarations here.</declaration>
-		<location id="id0" x="0" y="0">
+		<location id="id0" x="-425" y="-59">
+			<name x="-435" y="-93">start</name>
+		</location>
+		<location id="id1" x="-246" y="-59">
+			<name x="-229" y="-68">straight</name>
+		</location>
+		<location id="id2" x="17" y="-161">
+			<name x="25" y="-195">left</name>
+		</location>
+		<location id="id3" x="17" y="59">
+			<name x="34" y="59">right</name>
 		</location>
 		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<nail x="-187" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<nail x="178" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<nail x="-178" y="-238"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-407" y="-76">move!</label>
+		</transition>
+	</template>
+	<template>
+		<name>truckSlave</name>
+		<location id="id4" x="627" y="290">
+			<name x="644" y="290">right</name>
+		</location>
+		<location id="id5" x="364" y="172">
+			<name x="381" y="163">straight</name>
+		</location>
+		<location id="id6" x="627" y="70">
+			<name x="635" y="36">left</name>
+		</location>
+		<location id="id7" x="185" y="172">
+			<name x="175" y="138">start</name>
+		</location>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<nail x="423" y="350"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id6"/>
+			<nail x="788" y="180"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<nail x="432" y="-7"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="204" y="153">move?</label>
+		</transition>
+	</template>
+	<template>
+		<name>delay</name>
+		<location id="id8" x="466" y="290">
+			<name x="483" y="290">medium</name>
+		</location>
+		<location id="id9" x="203" y="172">
+			<name x="220" y="163">fast</name>
+		</location>
+		<location id="id10" x="466" y="70">
+			<name x="474" y="36">slow</name>
+		</location>
+		<location id="id11" x="25" y="170">
+			<name x="15" y="136">start</name>
+		</location>
+		<init ref="id11"/>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<nail x="262" y="350"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id10"/>
+			<nail x="627" y="180"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id8"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<nail x="271" y="-7"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="42" y="153">move?</label>
+		</transition>
 	</template>
 	<system>// Place template instantiations here.
 Process = Template();
