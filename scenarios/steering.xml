@@ -2,11 +2,15 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Place global declarations here.
-chan turnLeft, turnStraight, turnRight, move, short, medium, long, turn;
+chan move, clo, turnSlave;
 
 int delayint;
 bool l = false;
-bool r = false;</declaration>
+bool r = false;
+bool s = true;
+bool fastD = false;
+bool slowD = false;
+bool mediumD = false;</declaration>
 	<template>
 		<name x="5" y="5">truckMasterSteering</name>
 		<declaration>// Place local declarations here.
@@ -27,35 +31,45 @@ bool r = false;</declaration>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id1"/>
-			<label kind="assignment" x="-255" y="85">r = false</label>
+			<label kind="synchronisation" x="-238" y="127">clo!</label>
+			<label kind="assignment" x="-255" y="85">r = false, 
+s = true</label>
 			<nail x="-187" y="119"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id3"/>
-			<label kind="assignment" x="-178" y="-8">r = true</label>
+			<label kind="synchronisation" x="-153" y="25">clo!</label>
+			<label kind="assignment" x="-178" y="-8">r = true,
+s = false</label>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id2"/>
+			<label kind="synchronisation" x="195" y="-59">clo!</label>
 			<label kind="assignment" x="161" y="-85">l = true, r = false</label>
 			<nail x="178" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id3"/>
+			<label kind="synchronisation" x="-8" y="-59">clo!</label>
 			<label kind="assignment" x="25" y="-76">l = false, r = true</label>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
-			<label kind="assignment" x="-195" y="-272">l = false</label>
+			<label kind="synchronisation" x="-178" y="-221">clo!</label>
+			<label kind="assignment" x="-195" y="-272">l = false, 
+s = true</label>
 			<nail x="-178" y="-238"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id2"/>
-			<label kind="assignment" x="-153" y="-153">l = true</label>
+			<label kind="synchronisation" x="-119" y="-110">clo!</label>
+			<label kind="assignment" x="-153" y="-153">l = true, 
+s = false</label>
 		</transition>
 		<transition>
 			<source ref="id0"/>
@@ -88,6 +102,7 @@ bool r = false;</declaration>
 			<label kind="guard" x="-280" y="127">delayint == 0 &amp;&amp; 
 r == false &amp;&amp;
 l == false</label>
+			<label kind="synchronisation" x="-280" y="110">turnSlave!</label>
 			<nail x="-187" y="119"/>
 		</transition>
 		<transition>
@@ -95,19 +110,22 @@ l == false</label>
 			<target ref="id6"/>
 			<label kind="guard" x="-170" y="25">delayint == 0 &amp;&amp;
 r == true</label>
+			<label kind="synchronisation" x="-178" y="8">turnSlave!</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id5"/>
 			<label kind="guard" x="178" y="-76">delayint == 0 &amp;&amp; 
-r == false &amp;&amp;
-l == false</label>
+l == true</label>
+			<label kind="synchronisation" x="187" y="-93">turnSlave!</label>
 			<nail x="178" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id6"/>
-			<label kind="guard" x="25" y="-76">delayint == 0</label>
+			<label kind="guard" x="25" y="-76">delayint == 0 &amp;&amp;
+r == true</label>
+			<label kind="synchronisation" x="34" y="-93">turnSlave!</label>
 		</transition>
 		<transition>
 			<source ref="id5"/>
@@ -115,6 +133,7 @@ l == false</label>
 			<label kind="guard" x="-144" y="-280">delayint == 0 &amp;&amp; 
 r == false &amp;&amp;
 l == false</label>
+			<label kind="synchronisation" x="-127" y="-297">turnSlave!</label>
 			<nail x="-178" y="-229"/>
 		</transition>
 		<transition>
@@ -122,6 +141,7 @@ l == false</label>
 			<target ref="id5"/>
 			<label kind="guard" x="-161" y="-153">delayint == 0 &amp;&amp;
 l == true</label>
+			<label kind="synchronisation" x="-144" y="-170">turnSlave!</label>
 		</transition>
 	</template>
 	<template>
@@ -136,7 +156,7 @@ l == true</label>
 			<name x="474" y="36">slow</name>
 		</location>
 		<location id="id11" x="25" y="170">
-			<name x="0" y="187">delay0</name>
+			<name x="-17" y="187">delay0</name>
 		</location>
 		<location id="id12" x="255" y="-127">
 			<name x="238" y="-110">delay3</name>
@@ -147,10 +167,12 @@ l == true</label>
 		<location id="id14" x="-76" y="-127">
 			<name x="-127" y="-110">delay1</name>
 		</location>
-		<init ref="id11"/>
+		<init ref="id9"/>
 		<transition>
 			<source ref="id11"/>
 			<target ref="id10"/>
+			<label kind="guard" x="-177" y="136">slowD == true</label>
+			<label kind="synchronisation" x="-177" y="153">turnSlave?</label>
 			<label kind="assignment" x="-177" y="170">delayint = 3</label>
 			<nail x="-195" y="170"/>
 			<nail x="-187" y="-306"/>
@@ -160,6 +182,8 @@ l == true</label>
 		<transition>
 			<source ref="id11"/>
 			<target ref="id8"/>
+			<label kind="guard" x="0" y="357">mediumD == true</label>
+			<label kind="synchronisation" x="25" y="306">turnSlave?</label>
 			<label kind="assignment" x="34" y="331">delayint = 2</label>
 			<nail x="178" y="442"/>
 			<nail x="467" y="442"/>
@@ -167,18 +191,30 @@ l == true</label>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id14"/>
-			<label kind="guard" x="51" y="-17">l == true || r == true</label>
+			<label kind="guard" x="51" y="-17">l == true || r == true || s == true</label>
+			<label kind="synchronisation" x="42" y="25">clo?</label>
+			<label kind="assignment" x="76" y="0">fastD = true,
+slowD = false,
+mediumD = false</label>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id12"/>
-			<label kind="guard" x="484" y="-85">l == true || r == true</label>
+			<label kind="guard" x="484" y="-85">l == true || r == true || s == true</label>
+			<label kind="synchronisation" x="476" y="-59">clo?</label>
+			<label kind="assignment" x="518" y="-59">slowD = true, 
+fastD = false, 
+mediumD = false</label>
 			<nail x="467" y="-127"/>
 		</transition>
 		<transition>
 			<source ref="id8"/>
 			<target ref="id13"/>
-			<label kind="guard" x="765" y="246">l == true || r == true</label>
+			<label kind="guard" x="765" y="246">l == true || r == true || s == true</label>
+			<label kind="synchronisation" x="748" y="272">clo?</label>
+			<label kind="assignment" x="739" y="289">mediumD = true,
+slowD = false,
+fastD = false</label>
 			<nail x="493" y="314"/>
 			<nail x="620" y="425"/>
 			<nail x="926" y="8"/>
@@ -188,7 +224,6 @@ l == true</label>
 		<transition>
 			<source ref="id14"/>
 			<target ref="id11"/>
-			<label kind="synchronisation" x="-68" y="8">turn!</label>
 			<label kind="assignment" x="-102" y="34">delayint = 0</label>
 			<nail x="-76" y="-110"/>
 		</transition>
@@ -244,6 +279,8 @@ l == true</label>
 		<transition>
 			<source ref="id11"/>
 			<target ref="id9"/>
+			<label kind="guard" x="76" y="187">fastD == true</label>
+			<label kind="synchronisation" x="85" y="153">turnSlave?</label>
 			<label kind="assignment" x="85" y="170">delayint = 1</label>
 		</transition>
 	</template>
