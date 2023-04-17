@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
-	<declaration>// Place global declarations here.</declaration>
+	<declaration>// Place global declarations here.
+chan turnLeft, turnStraight, turnRight, move, short, medium, long;
+
+int delayint;
+bool l = false;
+bool r = false;</declaration>
 	<template>
-		<name x="5" y="5">truckMaster</name>
-		<declaration>// Place local declarations here.</declaration>
+		<name x="5" y="5">truckMasterSteering</name>
+		<declaration>// Place local declarations here.
+</declaration>
 		<location id="id0" x="-425" y="-59">
 			<name x="-435" y="-93">start</name>
 		</location>
@@ -21,136 +27,203 @@
 		<transition>
 			<source ref="id3"/>
 			<target ref="id1"/>
+			<label kind="synchronisation" x="-280" y="110">turnStraight!</label>
+			<label kind="assignment" x="-255" y="85">r = false</label>
 			<nail x="-187" y="119"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id3"/>
+			<label kind="synchronisation" x="-170" y="8">turnRight!</label>
+			<label kind="assignment" x="-178" y="-8">r = true</label>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id2"/>
+			<label kind="synchronisation" x="187" y="-59">turnLeft!</label>
+			<label kind="assignment" x="161" y="-85">l = true, r = false</label>
 			<nail x="178" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id3"/>
+			<label kind="synchronisation" x="25" y="-59">turnRight!</label>
+			<label kind="assignment" x="25" y="-76">l = false, r = true</label>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
+			<label kind="synchronisation" x="-204" y="-255">turnStraight!</label>
+			<label kind="assignment" x="-195" y="-272">l = false</label>
 			<nail x="-178" y="-238"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id2"/>
+			<label kind="synchronisation" x="-153" y="-136">turnLeft!</label>
+			<label kind="assignment" x="-153" y="-153">l = true</label>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="synchronisation" x="-407" y="-76">move!</label>
+			<label kind="synchronisation" x="-408" y="-76">move!</label>
 		</transition>
 	</template>
 	<template>
-		<name>truckSlave</name>
-		<location id="id4" x="627" y="290">
-			<name x="644" y="290">right</name>
+		<name>truckSlaveSteering</name>
+		<location id="id4" x="-425" y="-59">
+			<name x="-435" y="-93">start</name>
 		</location>
-		<location id="id5" x="364" y="172">
-			<name x="381" y="163">straight</name>
+		<location id="id5" x="-246" y="-59">
+			<name x="-229" y="-68">straight</name>
 		</location>
-		<location id="id6" x="627" y="70">
-			<name x="635" y="36">left</name>
+		<location id="id6" x="17" y="-161">
+			<name x="25" y="-195">left</name>
 		</location>
-		<location id="id7" x="185" y="172">
-			<name x="175" y="138">start</name>
+		<location id="id7" x="17" y="59">
+			<name x="34" y="59">right</name>
 		</location>
-		<init ref="id7"/>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id5"/>
-			<nail x="423" y="350"/>
-		</transition>
-		<transition>
-			<source ref="id5"/>
-			<target ref="id4"/>
-		</transition>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id6"/>
-			<nail x="788" y="180"/>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id4"/>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id5"/>
-			<nail x="432" y="-7"/>
-		</transition>
-		<transition>
-			<source ref="id5"/>
-			<target ref="id6"/>
-		</transition>
+		<init ref="id4"/>
 		<transition>
 			<source ref="id7"/>
 			<target ref="id5"/>
-			<label kind="synchronisation" x="204" y="153">move?</label>
+			<label kind="guard" x="-280" y="127">delayint == 0</label>
+			<nail x="-187" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-170" y="25">delayint == 0</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="178" y="-76">delayint == 0</label>
+			<nail x="178" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="25" y="-76">delayint == 0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-204" y="-272">delayint == 0</label>
+			<nail x="-178" y="-238"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-161" y="-153">delayint == 0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-407" y="-76">move?</label>
 		</transition>
 	</template>
 	<template>
 		<name>delay</name>
 		<location id="id8" x="466" y="290">
-			<name x="483" y="290">medium</name>
+			<name x="484" y="280">medium</name>
 		</location>
-		<location id="id9" x="203" y="172">
-			<name x="220" y="163">fast</name>
+		<location id="id9" x="204" y="170">
+			<name x="221" y="161">fast</name>
 		</location>
 		<location id="id10" x="466" y="70">
 			<name x="474" y="36">slow</name>
 		</location>
 		<location id="id11" x="25" y="170">
-			<name x="15" y="136">start</name>
+			<name x="0" y="187">delay0</name>
+		</location>
+		<location id="id12" x="255" y="-127">
+			<name x="238" y="-110">delay3</name>
+		</location>
+		<location id="id13" x="85" y="-127">
+			<name x="68" y="-110">delay2</name>
+		</location>
+		<location id="id14" x="-76" y="-127">
+			<name x="-127" y="-110">delay1</name>
 		</location>
 		<init ref="id11"/>
 		<transition>
+			<source ref="id9"/>
+			<target ref="id14"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id12"/>
+			<nail x="467" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id13"/>
+			<nail x="493" y="314"/>
+			<nail x="620" y="425"/>
+			<nail x="926" y="8"/>
+			<nail x="408" y="-221"/>
+			<nail x="85" y="-221"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id11"/>
+			<nail x="-76" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+		</transition>
+		<transition>
 			<source ref="id8"/>
 			<target ref="id9"/>
+			<label kind="assignment" x="195" y="331">delayint = 1</label>
 			<nail x="262" y="350"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id8"/>
+			<label kind="assignment" x="314" y="204">delayint = 2</label>
 		</transition>
 		<transition>
 			<source ref="id8"/>
 			<target ref="id10"/>
+			<label kind="assignment" x="637" y="170">delayint = 3</label>
 			<nail x="627" y="180"/>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id8"/>
+			<label kind="assignment" x="391" y="170">delayint = 2</label>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id9"/>
+			<label kind="assignment" x="246" y="-34">delayint = 1</label>
 			<nail x="271" y="-7"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id10"/>
+			<label kind="assignment" x="323" y="127">delayint = 3</label>
 		</transition>
 		<transition>
 			<source ref="id11"/>
 			<target ref="id9"/>
-			<label kind="synchronisation" x="42" y="153">move?</label>
+			<label kind="assignment" x="85" y="170">delayint = 1</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-Process = Template();
+truckMasterOne = truckMasterSteering();
+truckSlaveOne = truckSlaveSteering();
+delayTruckOne = delay();
+
 // List one or more processes to be composed into a system.
-system Process;
+system truckMasterOne, truckSlaveOne, delayTruckOne;
     </system>
 	<queries>
 		<query>
