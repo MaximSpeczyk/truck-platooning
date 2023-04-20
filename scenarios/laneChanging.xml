@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan initiateLaneChange:
+chan laneChangeCompleted;
+chan resumeCruising;</declaration>
+	<template>
+		<name x="5" y="5">Leader Vehicle</name>
+		<declaration>// Place local declarations here.
+guard: globalTime &gt;= laneChangeTime
+sync: leaderLaneChangeRequest!
+guard: all agents have acknowledged
+sync: leaderLaneChangeAck[0]?, leaderLaneChangeAck[1]?, leaderLaneChangeAck[2]?</declaration>
+		<location id="id0" x="-127" y="-34">
+			<name x="-137" y="-68">Cruising</name>
+		</location>
+		<location id="id1" x="204" y="-34">
+			<name x="194" y="-68">changingLane</name>
+		</location>
+		<location id="id2" x="59" y="102">
+			<name x="49" y="68">laneChanged</name>
+		</location>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-144" y="17">resumeCruising?</label>
+			<label kind="assignment" x="-93" y="51">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="94" y="-5">t &gt;= 2</label>
+			<label kind="synchronisation" x="94" y="12">laneChangeCompleted!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="17" y="-68">t &gt;= 2</label>
+			<label kind="synchronisation" x="-17" y="-51">initiateLaneChange!</label>
+			<label kind="assignment" x="17" y="-25">t = 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Agent Vehicle</name>
+		<location id="id3" x="-204" y="-17">
+			<name x="-214" y="-51">Following</name>
+		</location>
+		<location id="id4" x="34" y="-17">
+			<name x="24" y="-51">changingLane</name>
+		</location>
+		<location id="id5" x="-59" y="119">
+			<name x="-93" y="136">laneChanged</name>
+		</location>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-186" y="34">resumeFollowing?</label>
+			<label kind="assignment" x="-186" y="51">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-51" y="34">t &gt;= 10</label>
+			<label kind="synchronisation" x="-59" y="51">laneChangeCompleted!</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-161" y="-42">initiateLaneChange?</label>
+			<label kind="assignment" x="-110" y="-17">t = 0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+sync: leaderLaneChangeRequest?
+
+
+ sync: leaderLaneChangeAck[i]!</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
