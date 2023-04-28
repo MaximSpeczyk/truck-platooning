@@ -4,7 +4,7 @@
 	<declaration>// Place global declarations here.
 broadcast chan continueDriving, break, continueBreaking;
 
-clock x;</declaration>
+</declaration>
 	<template>
 		<name>truckSlave</name>
 		<location id="id0" x="-7803" y="-8338">
