@@ -2,130 +2,125 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Place global declarations here.
-broadcast chan move;
+broadcast chan goIdle, left, right;
 
-int x = 1;
-int y = 0;</declaration>
+clock x;</declaration>
 	<template>
 		<name x="5" y="5">truckMasterSteering</name>
 		<declaration>// Place local declarations here.
 </declaration>
 		<location id="id0" x="-204" y="-229">
-			<name x="-229" y="-263">straight</name>
+			<name x="-229" y="-263">idle</name>
 		</location>
 		<location id="id1" x="-382" y="-8">
-			<name x="-425" y="0">left</name>
+			<name x="-425" y="0">lefty</name>
 		</location>
 		<location id="id2" x="-59" y="-8">
-			<name x="-34" y="-8">right</name>
+			<name x="-34" y="-8">righty</name>
 		</location>
 		<init ref="id0"/>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
+			<label kind="guard" x="-364" y="-42">x &gt;= 2</label>
+			<label kind="synchronisation" x="-364" y="-25">left!</label>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id0"/>
-			<label kind="synchronisation" x="-42" y="-221">move!</label>
+			<label kind="synchronisation" x="-186" y="-225">goIdle?</label>
 			<nail x="-17" y="-187"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id0"/>
+			<label kind="synchronisation" x="-373" y="-233">goIdle?</label>
 			<nail x="-391" y="-204"/>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="synchronisation" x="-331" y="-144">move!</label>
+			<label kind="guard" x="-364" y="-148">x &gt;= 2</label>
+			<label kind="synchronisation" x="-364" y="-131">left!</label>
 			<nail x="-212" y="-221"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id2"/>
+			<label kind="guard" x="-364" y="25">x &gt;= 2</label>
+			<label kind="synchronisation" x="-364" y="42">right!</label>
 			<nail x="-212" y="127"/>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id2"/>
+			<label kind="guard" x="-177" y="-144">x &gt;= 2</label>
+			<label kind="synchronisation" x="-177" y="-127">right!</label>
 			<nail x="-195" y="-212"/>
 		</transition>
 	</template>
 	<template>
 		<name>truckSlaveSteering</name>
-		<location id="id3" x="-246" y="-59">
-			<name x="-229" y="-68">straight</name>
+		<location id="id3" x="-204" y="-229">
+			<name x="-229" y="-263">straighty</name>
 		</location>
-		<location id="id4" x="17" y="-161">
-			<name x="25" y="-195">left</name>
+		<location id="id4" x="-382" y="-8">
+			<name x="-425" y="0">lefty</name>
+			<committed/>
 		</location>
-		<location id="id5" x="17" y="59">
-			<name x="34" y="59">right</name>
+		<location id="id5" x="-59" y="-8">
+			<name x="-34" y="-8">righty</name>
+			<committed/>
 		</location>
-		<location id="id6" x="-425" y="-59">
-		</location>
-		<init ref="id6"/>
+		<init ref="id3"/>
 		<transition>
-			<source ref="id6"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-407" y="-76">move?</label>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-364" y="-25">left?</label>
+			<label kind="assignment" x="-364" y="-8">x := 0</label>
 		</transition>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-280" y="127">delayint == 0 &amp;&amp; 
-r == false &amp;&amp;
-l == false</label>
-			<label kind="synchronisation" x="-280" y="110">turnSlave!</label>
-			<nail x="-187" y="119"/>
-		</transition>
-		<transition>
-			<source ref="id3"/>
-			<target ref="id5"/>
-			<label kind="guard" x="-170" y="25">delayint == 0 &amp;&amp;
-r == true</label>
-			<label kind="synchronisation" x="-178" y="8">turnSlave!</label>
-		</transition>
-		<transition>
-			<source ref="id5"/>
-			<target ref="id4"/>
-			<label kind="guard" x="178" y="-76">delayint == 0 &amp;&amp; 
-l == true</label>
-			<label kind="synchronisation" x="187" y="-93">turnSlave!</label>
-			<nail x="178" y="-51"/>
-		</transition>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id5"/>
-			<label kind="guard" x="25" y="-76">delayint == 0 &amp;&amp;
-r == true</label>
-			<label kind="synchronisation" x="34" y="-93">turnSlave!</label>
+			<label kind="synchronisation" x="-186" y="-225">goIdle!</label>
+			<label kind="assignment" x="-186" y="-208">x := 0</label>
+			<nail x="-17" y="-187"/>
 		</transition>
 		<transition>
 			<source ref="id4"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-144" y="-280">delayint == 0 &amp;&amp; 
-r == false &amp;&amp;
-l == false</label>
-			<label kind="synchronisation" x="-127" y="-297">turnSlave!</label>
-			<nail x="-178" y="-229"/>
+			<label kind="synchronisation" x="-373" y="-233">goIdle!</label>
+			<label kind="assignment" x="-373" y="-216">x := 0</label>
+			<nail x="-391" y="-204"/>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id4"/>
-			<label kind="guard" x="-161" y="-153">delayint == 0 &amp;&amp;
-l == true</label>
-			<label kind="synchronisation" x="-144" y="-170">turnSlave!</label>
+			<label kind="synchronisation" x="-331" y="-136">left?</label>
+			<label kind="assignment" x="-364" y="-114">x := 0</label>
+			<nail x="-212" y="-221"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-364" y="42">right?</label>
+			<label kind="assignment" x="-364" y="59">x := 0</label>
+			<nail x="-212" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-177" y="-127">right?</label>
+			<label kind="assignment" x="-177" y="-110">x := 0</label>
+			<nail x="-195" y="-212"/>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
 truckMasterOne = truckMasterSteering();
 truckSlaveOne = truckSlaveSteering();
-delayTruckOne = delay();
 
 // List one or more processes to be composed into a system.
-system truckMasterOne, truckSlaveOne, delayTruckOne;
+system truckMasterOne, truckSlaveOne;
     </system>
 	<queries>
 		<query>
