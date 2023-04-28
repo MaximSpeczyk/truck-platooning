@@ -62,7 +62,7 @@ clock x;</declaration>
 	<template>
 		<name>truckSlaveSteering</name>
 		<location id="id3" x="-204" y="-229">
-			<name x="-229" y="-263">straighty</name>
+			<name x="-229" y="-263">idle</name>
 		</location>
 		<location id="id4" x="-382" y="-8">
 			<name x="-425" y="0">lefty</name>
