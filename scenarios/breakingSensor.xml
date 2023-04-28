@@ -2,144 +2,107 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Place global declarations here.
-chan continue_driving, move, continue_breaking, break;
+chan startDriving, continueDriving, break, continueBreaking;
 
 //if distanceSensor is true the truck is t olose to the next truck
-bool distanceSensor = false;
-
-clock x, y;</declaration>
+</declaration>
 	<template>
 		<name>truckSlave</name>
-		<location id="id0" x="-7845" y="-8168">
-			<name x="-7855" y="-8202">drive</name>
+		<location id="id0" x="-7939" y="-8338">
+			<name x="-7949" y="-8372">start</name>
 		</location>
-		<location id="id1" x="-7462" y="-8168">
-			<name x="-7513" y="-8151">breaking</name>
+		<location id="id1" x="-7803" y="-8338">
+			<name x="-7854" y="-8330">driving</name>
+		</location>
+		<location id="id2" x="-7803" y="-8202">
+			<name x="-7820" y="-8185">breaking</name>
 		</location>
 		<init ref="id0"/>
 		<transition>
 			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-7726" y="-8347">distanceSensor == false</label>
-			<nail x="-7649" y="-8329"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-7854" y="-8415">continueDriving?</label>
+			<nail x="-7752" y="-8398"/>
+			<nail x="-7854" y="-8398"/>
 		</transition>
 		<transition>
-			<source ref="id0"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-7922" y="-8041">distanceSensor == false</label>
-			<nail x="-7768" y="-8049"/>
-			<nail x="-7913" y="-8049"/>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-7990" y="-8211">continueBreaking?</label>
+			<nail x="-7862" y="-8236"/>
+			<nail x="-7862" y="-8160"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-7684" y="-8279">continueDriving?</label>
+			<nail x="-7692" y="-8202"/>
+			<nail x="-7692" y="-8338"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
-			<target ref="id1"/>
-			<label kind="guard" x="-7344" y="-8168">distanceSensor == true</label>
-			<nail x="-7369" y="-8065"/>
-			<nail x="-7369" y="-8244"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-7803" y="-8287">break?</label>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="guard" x="-7709" y="-8194">distanceSensor == true</label>
+			<label kind="synchronisation" x="-7922" y="-8355">startDriving?</label>
 		</transition>
 	</template>
 	<template>
 		<name x="5" y="5">truckMaster</name>
 		<declaration>// Place local declarations here.
 </declaration>
-		<location id="id2" x="-204" y="-127">
-			<name x="-214" y="-161">start</name>
+		<location id="id3" x="-7803" y="-8338">
+			<name x="-7854" y="-8330">driving</name>
 		</location>
-		<location id="id3" x="-42" y="-8">
-			<name x="-52" y="-42">drive</name>
+		<location id="id4" x="-7803" y="-8202">
+			<name x="-7820" y="-8185">breaking</name>
 		</location>
-		<location id="id4" x="348" y="-8">
-			<name x="338" y="-42">breaking</name>
-		</location>
-		<init ref="id2"/>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="102" y="-161">continue_driving!</label>
-			<nail x="153" y="-136"/>
-		</transition>
-		<transition>
-			<source ref="id3"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-93" y="93">continue_driving!</label>
-			<nail x="51" y="93"/>
-			<nail x="-127" y="93"/>
-		</transition>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id4"/>
-			<label kind="synchronisation" x="476" y="0">continue_breaking!</label>
-			<nail x="467" y="93"/>
-			<nail x="467" y="-76"/>
-		</transition>
-		<transition>
-			<source ref="id3"/>
-			<target ref="id4"/>
-			<label kind="synchronisation" x="127" y="-25">break!</label>
-		</transition>
-		<transition>
-			<source ref="id2"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-186" y="-84">move!</label>
-		</transition>
-	</template>
-	<template>
-		<name>sensorSlave</name>
-		<location id="id5" x="-42" y="76">
-			<name x="-59" y="42">start</name>
-		</location>
-		<location id="id6" x="144" y="76">
-			<name x="59" y="42">goodDistance</name>
-		</location>
-		<location id="id7" x="416" y="76">
-			<name x="406" y="42">closeDistance</name>
+		<location id="id5" x="-7939" y="-8338">
+			<name x="-7949" y="-8372">start</name>
 		</location>
 		<init ref="id5"/>
 		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-7854" y="-8415">continueDriving!</label>
+			<nail x="-7752" y="-8398"/>
+			<nail x="-7854" y="-8398"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-7990" y="-8211">continueBreaking!</label>
+			<nail x="-7862" y="-8236"/>
+			<nail x="-7862" y="-8160"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-7684" y="-8279">continueDriving!</label>
+			<nail x="-7692" y="-8202"/>
+			<nail x="-7692" y="-8338"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-7803" y="-8287">break!</label>
+		</transition>
+		<transition>
 			<source ref="id5"/>
-			<target ref="id6"/>
-			<label kind="synchronisation" x="-24" y="59">move?</label>
-		</transition>
-		<transition>
-			<source ref="id7"/>
-			<target ref="id6"/>
-			<label kind="synchronisation" x="221" y="-68">continue_driving?</label>
-			<label kind="assignment" x="204" y="-85">distanceSensor = false</label>
-			<nail x="263" y="-51"/>
-		</transition>
-		<transition>
-			<source ref="id7"/>
-			<target ref="id7"/>
-			<label kind="synchronisation" x="365" y="170">continue_breaking?</label>
-			<nail x="501" y="170"/>
-			<nail x="357" y="170"/>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id6"/>
-			<label kind="synchronisation" x="93" y="170">continue_driving?</label>
-			<nail x="229" y="170"/>
-			<nail x="76" y="170"/>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id7"/>
-			<label kind="synchronisation" x="246" y="76">break?</label>
-			<label kind="assignment" x="195" y="51">distanceSensor = true</label>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-7922" y="-8355">startDriving!</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
 truckMasterOne = truckMaster();
 truckSlaveOne = truckSlave();
-sensorSlaveOne = sensorSlave();
+truckSlaveTwo = truckSlave();
 
 // List one or more processes to be composed into a system.
-system truckMasterOne, truckSlaveOne, sensorSlaveOne;
+system truckMasterOne, truckSlaveOne, truckSlaveTwo;
     </system>
 	<queries>
 		<query>
