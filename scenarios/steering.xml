@@ -13,10 +13,10 @@ clock x;</declaration>
 			<name x="-229" y="-263">idle</name>
 		</location>
 		<location id="id1" x="-382" y="-8">
-			<name x="-425" y="0">lefty</name>
+			<name x="-425" y="0">turnLeft</name>
 		</location>
 		<location id="id2" x="-59" y="-8">
-			<name x="-34" y="-8">righty</name>
+			<name x="-34" y="-8">turnRight</name>
 		</location>
 		<init ref="id0"/>
 		<transition>
@@ -28,13 +28,15 @@ clock x;</declaration>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id0"/>
-			<label kind="synchronisation" x="-186" y="-225">goIdle?</label>
+			<label kind="guard" x="-186" y="-242">x&gt;=2</label>
+			<label kind="synchronisation" x="-186" y="-225">goIdle!</label>
 			<nail x="-17" y="-187"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="synchronisation" x="-373" y="-233">goIdle?</label>
+			<label kind="guard" x="-373" y="-250">x&gt;=2</label>
+			<label kind="synchronisation" x="-373" y="-233">goIdle!</label>
 			<nail x="-391" y="-204"/>
 		</transition>
 		<transition>
@@ -65,12 +67,10 @@ clock x;</declaration>
 			<name x="-229" y="-263">idle</name>
 		</location>
 		<location id="id4" x="-382" y="-8">
-			<name x="-425" y="0">lefty</name>
-			<committed/>
+			<name x="-425" y="0">turnLeft</name>
 		</location>
 		<location id="id5" x="-59" y="-8">
-			<name x="-34" y="-8">righty</name>
-			<committed/>
+			<name x="-34" y="-8">turnRight</name>
 		</location>
 		<init ref="id3"/>
 		<transition>
@@ -82,14 +82,14 @@ clock x;</declaration>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id3"/>
-			<label kind="synchronisation" x="-186" y="-225">goIdle!</label>
+			<label kind="synchronisation" x="-186" y="-225">goIdle?</label>
 			<label kind="assignment" x="-186" y="-208">x := 0</label>
 			<nail x="-17" y="-187"/>
 		</transition>
 		<transition>
 			<source ref="id4"/>
 			<target ref="id3"/>
-			<label kind="synchronisation" x="-373" y="-233">goIdle!</label>
+			<label kind="synchronisation" x="-373" y="-233">goIdle?</label>
 			<label kind="assignment" x="-373" y="-216">x := 0</label>
 			<nail x="-391" y="-204"/>
 		</transition>
