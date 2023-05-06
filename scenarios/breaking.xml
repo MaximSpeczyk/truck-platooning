@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+broadcast chan continueDriving, break, continueBreaking;
+
+</declaration>
+	<template>
+		<name>truckSlave</name>
+		<location id="id0" x="-7803" y="-8338">
+			<name x="-7854" y="-8330">driving</name>
+		</location>
+		<location id="id1" x="-7803" y="-8202">
+			<name x="-7820" y="-8185">breaking</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-7854" y="-8415">continueDriving?</label>
+			<nail x="-7752" y="-8398"/>
+			<nail x="-7854" y="-8398"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-7990" y="-8211">continueBreaking?</label>
+			<nail x="-7862" y="-8236"/>
+			<nail x="-7862" y="-8160"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-7684" y="-8279">continueDriving?</label>
+			<nail x="-7692" y="-8202"/>
+			<nail x="-7692" y="-8338"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-7803" y="-8287">break?</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">truckMaster</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id2" x="-7803" y="-8338">
+			<name x="-7854" y="-8330">driving</name>
+		</location>
+		<location id="id3" x="-7803" y="-8202">
+			<name x="-7820" y="-8185">breaking</name>
+		</location>
+		<init ref="id2"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-7854" y="-8415">continueDriving!</label>
+			<nail x="-7752" y="-8398"/>
+			<nail x="-7854" y="-8398"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-7990" y="-8211">continueBreaking!</label>
+			<nail x="-7862" y="-8236"/>
+			<nail x="-7862" y="-8160"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-7684" y="-8279">continueDriving!</label>
+			<nail x="-7692" y="-8202"/>
+			<nail x="-7692" y="-8338"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-7803" y="-8287">break!</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+truckMasterOne = truckMaster();
+truckSlaveOne = truckSlave();
+truckSlaveTwo = truckSlave();
+truckSlaveThree = truckSlave();
+truckSlaveFour = truckSlave();
+truckSlaveFive = truckSlave();
+truckSlaveSix = truckSlave();
+
+// List one or more processes to be composed into a system.
+system truckMasterOne, truckSlaveOne, truckSlaveTwo, truckSlaveThree, truckSlaveFour, truckSlaveFive, truckSlaveSix;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
