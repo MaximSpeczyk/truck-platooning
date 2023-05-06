@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+// int limit;
+//chanel definitions
+bool joineed;
+
+broadcast chan move, join,finish, continues_to_move_platoon, continues_to_move_indi, joined, not_joined, maintain_distance, restart_platoon;
+chan leave;
+
+clock watchdog;</declaration>
+	<template>
+		<name x="5" y="5">Truck</name>
+		<declaration>// Place local declarations here.
+clock wait;</declaration>
+		<location id="id0" x="204" y="-93">
+			<name x="187" y="-85">platoon_failed</name>
+		</location>
+		<location id="id1" x="0" y="59">
+			<name x="-59" y="76">move_individually</name>
+		</location>
+		<location id="id2" x="-8" y="-255">
+			<name x="-68" y="-306">successful_join</name>
+		</location>
+		<location id="id3" x="195" y="59">
+			<name x="144" y="25">end_of_journey</name>
+		</location>
+		<location id="id4" x="-204" y="-85">
+			<name x="-272" y="-119">join_platoon</name>
+		</location>
+		<location id="id5" x="-382" y="-85">
+			<name x="-416" y="-127">find_platoon</name>
+		</location>
+		<location id="id6" x="-561" y="-85">
+			<name x="-603" y="-128">start_truck</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="59" y="-8">maintain_distance?</label>
+			<nail x="17" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="76" y="-195">restart_platoon?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-51" y="-144">leave!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-93" y="-357">continues_to_move_platoon?</label>
+			<nail x="-67" y="-314"/>
+			<nail x="34" y="-314"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-52" y="118">continues_to_move_indi!</label>
+			<nail x="-77" y="110"/>
+			<nail x="101" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-280" y="-42">joineed==false</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-153" y="-102">joineed==true</label>
+			<label kind="assignment" x="-153" y="-76">joineed=false</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-314" y="-110">join!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-501" y="-110">move!</label>
+		</transition>
+	</template>
+	<template>
+		<name>Watchdog</name>
+		<location id="id7" x="153" y="-51">
+			<committed/>
+		</location>
+		<location id="id8" x="34" y="-42">
+			<name x="-8" y="-17">communication_fail</name>
+			<urgent/>
+		</location>
+		<location id="id9" x="-255" y="-34">
+			<name x="-265" y="-68">OK</name>
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="127" y="50">restart_platoon!</label>
+			<nail x="161" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="60" y="-110">watchdog&gt;=10</label>
+			<label kind="synchronisation" x="59" y="-136">maintain_distance!</label>
+			<nail x="144" y="-144"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-144" y="76">watchdog &lt; 10</label>
+			<nail x="-119" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-161" y="-170">watchdog &gt;=10</label>
+			<label kind="synchronisation" x="-170" y="-93">restart_platoon!</label>
+			<nail x="-119" y="-136"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-398" y="-145">watchdog &lt; 10</label>
+			<nail x="-348" y="-119"/>
+			<nail x="-357" y="-9"/>
+		</transition>
+	</template>
+	<template>
+		<name>Platoon_limit</name>
+		<declaration>int limit;
+
+clock t;</declaration>
+		<location id="id10" x="689" y="-212">
+		</location>
+		<location id="id11" x="688" y="-178">
+		</location>
+		<location id="id12" x="297" y="-119">
+			<name x="254" y="-102">joined_platoon</name>
+		</location>
+		<location id="id13" x="467" y="-119">
+			<name x="425" y="-102">left_platoon</name>
+		</location>
+		<location id="id14" x="-110" y="-212">
+			<name x="-195" y="-246">awaiting_request_to_join</name>
+		</location>
+		<location id="id15" x="280" y="-348">
+			<name x="196" y="-390">join_platoon_denied</name>
+		</location>
+		<location id="id16" x="119" y="-212">
+			<name x="42" y="-246">verify_join_request</name>
+		</location>
+		<location id="id17" x="459" y="-348">
+			<name x="417" y="-382">continue_journey</name>
+		</location>
+		<init ref="id14"/>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="374" y="-238">continues_to_move_indi?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="552" y="-161">finish?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="578" y="-297">finish?</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="289" y="-340">continues_to_move_indi?</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="365" y="-119">leave?</label>
+			<label kind="assignment" x="357" y="-153">limit--</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-34" y="-229">join?</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id15"/>
+			<label kind="guard" x="153" y="-297">limit &gt; 4</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id12"/>
+			<label kind="guard" x="136" y="-170">limit &lt; 4</label>
+			<label kind="assignment" x="153" y="-153">limit++</label>
+		</transition>
+	</template>
+	<template>
+		<name>Platoon</name>
+		<declaration>int limit;
+bool joined = false;
+
+clock t;</declaration>
+		<location id="id18" x="-27429" y="-27072">
+			<name x="-27480" y="-27055">successfully_joined</name>
+		</location>
+		<location id="id19" x="-27429" y="-27302">
+			<name x="-27506" y="-27336">awaiting_join_request</name>
+		</location>
+		<init ref="id19"/>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="assignment" x="-27480" y="-27369">watchdog := 0</label>
+			<nail x="-27488" y="-27353"/>
+			<nail x="-27369" y="-27353"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-27310" y="-27217">restart_platoon?</label>
+			<nail x="-27310" y="-27064"/>
+			<nail x="-27310" y="-27302"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-27539" y="-26979">continues_to_move_platoon!</label>
+			<label kind="assignment" x="-27514" y="-27013">watchdog := 0</label>
+			<nail x="-27310" y="-27013"/>
+			<nail x="-27514" y="-27022"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-27480" y="-27251">limit&lt;3</label>
+			<label kind="synchronisation" x="-27471" y="-27217">join?</label>
+			<label kind="assignment" x="-27471" y="-27166">limit++,joineed=true,
+watchdog := 0</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-27565" y="-27183">leave?</label>
+			<label kind="assignment" x="-27582" y="-27157">limit--,
+watchdog := 0</label>
+			<nail x="-27514" y="-27072"/>
+			<nail x="-27514" y="-27302"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+truck_1 = Truck();
+truck_2 = Truck();
+truck_3 = Truck();
+truck_4 = Truck();
+
+watchdog_1 = Watchdog();
+
+platoon = Platoon();
+// List one or more processes to be composed into a system.
+system truck_1, truck_2, truck_3, platoon, watchdog_1;
+//system watchdog_1;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
