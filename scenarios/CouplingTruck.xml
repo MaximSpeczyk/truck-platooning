@@ -130,8 +130,8 @@ clock x;</declaration>
 		<location id="id12" x="-807" y="-272">
 			<name x="-850" y="-263">rearTruckEntry</name>
 		</location>
-		<location id="id13" x="-806" y="-178">
-			<name x="-850" y="-170">coupleTruck</name>
+		<location id="id13" x="-807" y="-187">
+			<name x="-851" y="-179">coupleTruck</name>
 		</location>
 		<location id="id14" x="-433" y="-187">
 			<name x="-467" y="-178">UpdatePlatoon</name>
@@ -139,7 +139,7 @@ clock x;</declaration>
 		<location id="id15" x="-807" y="-340">
 			<name x="-875" y="-323">waitingEntryPosition</name>
 		</location>
-		<location id="id16" x="-663" y="-272">
+		<location id="id16" x="-671" y="-272">
 		</location>
 		<init ref="id9"/>
 		<transition>
@@ -199,7 +199,7 @@ clock x;</declaration>
 			<label kind="guard" x="-1028" y="-501">maxPlatoonLength&gt;=6</label>
 			<label kind="synchronisation" x="-935" y="-459">cancel!</label>
 			<label kind="assignment" x="-1020" y="-476">maxPlatoonLength:=0</label>
-			<nail x="-875" y="-459"/>
+			<nail x="-875" y="-493"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
