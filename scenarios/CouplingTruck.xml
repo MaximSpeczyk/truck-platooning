@@ -44,6 +44,14 @@ clock x;</declaration>
 		</location>
 		<init ref="id0"/>
 		<transition>
+			<source ref="id4"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="120" y="-323">update!</label>
+			<nail x="425" y="-306"/>
+			<nail x="416" y="170"/>
+			<nail x="-544" y="170"/>
+		</transition>
+		<transition>
 			<source ref="id2"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-93" y="-127">maxPlatoonLength&gt;=1</label>
@@ -134,6 +142,14 @@ clock x;</declaration>
 		<location id="id16" x="-663" y="-272">
 		</location>
 		<init ref="id9"/>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-1037" y="-365">update?</label>
+			<nail x="-1037" y="-340"/>
+			<nail x="-1037" y="-110"/>
+			<nail x="-433" y="-110"/>
+		</transition>
 		<transition>
 			<source ref="id16"/>
 			<target ref="id13"/>
