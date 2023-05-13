@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
-	<declaration>broadcast chan requestToLeavePlatoon, sendAcknowledgement, exitPosition, cancel, rearExit, frontExit, reachExitPosition, nominalSpace, exitPlatoonCompleted, update;
+	<declaration>broadcast chan requestToLeavePlatoon, sendAcknowledgement, cancel, rearExit, frontExit, reachExitPosition, nominalSpace, exitPlatoonCompleted, update;
 
-int[0,2] entryPosition;
-int maxPlatoonLength= 0;
+int[0,2] exitPosition;
+int maxPlatoonLength= 6;
 
 clock x;</declaration>
 	<template>
@@ -12,7 +12,6 @@ clock x;</declaration>
 		<declaration>// Place local declarations here.</declaration>
 		<location id="id0" x="-153" y="-289">
 			<name x="-163" y="-323">IDLE</name>
-			<label kind="invariant" x="-204" y="-340">maxPlatoonLength:=6</label>
 		</location>
 		<location id="id1" x="-153" y="-153">
 			<name x="-213" y="-145">waitingResponse</name>
@@ -21,7 +20,7 @@ clock x;</declaration>
 			<name x="68" y="-59">frontTruckExit</name>
 		</location>
 		<location id="id3" x="-153" y="0">
-			<name x="-196" y="9">rearTruckEntry</name>
+			<name x="-196" y="9">rearTruckExit</name>
 		</location>
 		<location id="id4" x="-153" y="85">
 			<name x="-197" y="93">returnToNominalSpace</name>
@@ -57,14 +56,14 @@ clock x;</declaration>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id2"/>
-			<label kind="guard" x="-102" y="-119">maxPlatoonLength==2</label>
+			<label kind="guard" x="-102" y="-119">maxPlatoonLength&lt;= 3</label>
 			<label kind="synchronisation" x="-85" y="-93">frontExit?</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-315" y="-34">maxPlatoonLength&gt;=1</label>
-			<label kind="synchronisation" x="-238" y="-17">rearExit?</label>
+			<label kind="guard" x="-374" y="-34">maxPlatoonLength&lt;= 5</label>
+			<label kind="synchronisation" x="-297" y="-17">rearExit?</label>
 		</transition>
 		<transition>
 			<source ref="id1"/>
@@ -76,6 +75,7 @@ clock x;</declaration>
 			<target ref="id0"/>
 			<label kind="synchronisation" x="238" y="-110">update?</label>
 			<nail x="221" y="-289"/>
+			<nail x="-51" y="-289"/>
 		</transition>
 		<transition>
 			<source ref="id4"/>
@@ -92,7 +92,7 @@ clock x;</declaration>
 			<target ref="id0"/>
 			<label kind="guard" x="-374" y="-229">maxPlatoonLength&lt;=1</label>
 			<label kind="synchronisation" x="-281" y="-187">cancel!</label>
-			<label kind="assignment" x="-366" y="-204">maxPlatoonLength:=0</label>
+			<label kind="assignment" x="-366" y="-204">maxPlatoonLength=6</label>
 			<nail x="-221" y="-221"/>
 		</transition>
 		<transition>
@@ -106,7 +106,6 @@ clock x;</declaration>
 		<name>slaveTruck</name>
 		<location id="id8" x="-578" y="-170">
 			<name x="-603" y="-153">leavePlatoon</name>
-			<label kind="invariant" x="-629" y="-212">maxPlatoonLength:= 6</label>
 		</location>
 		<location id="id9" x="-306" y="-170">
 			<name x="-357" y="-153">waitingResponse</name>
@@ -114,7 +113,7 @@ clock x;</declaration>
 			<label kind="testcodeExit">maxPlatoonLength++</label>
 		</location>
 		<location id="id10" x="0" y="-170">
-			<name x="-60" y="-161">SelectingEntryPosition</name>
+			<name x="-60" y="-161">SelectingExitPosition</name>
 		</location>
 		<location id="id11" x="0" y="-289">
 			<name x="-9" y="-323">Cancelling</name>
@@ -138,7 +137,7 @@ clock x;</declaration>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id13"/>
-			<label kind="guard" x="51" y="-127">maxPlatoonLength= maxPlatoonLength-2</label>
+			<label kind="guard" x="51" y="-127">maxPlatoonLength&lt;= 3</label>
 			<label kind="synchronisation" x="93" y="-102">frontExit!</label>
 		</transition>
 		<transition>
@@ -163,9 +162,8 @@ clock x;</declaration>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id12"/>
-			<label kind="guard" x="-238" y="-127">maxPlatoonLength= maxPlatoonLength-1</label>
+			<label kind="guard" x="-212" y="-127">maxPlatoonLength&lt;= 5</label>
 			<label kind="synchronisation" x="-179" y="-110">rearExit!</label>
-			<label kind="assignment" x="-212" y="-93">maxPlatoonLength--</label>
 		</transition>
 		<transition>
 			<source ref="id15"/>
@@ -182,7 +180,7 @@ clock x;</declaration>
 		<transition>
 			<source ref="id12"/>
 			<target ref="id14"/>
-			<label kind="synchronisation" x="-170" y="51">reachExitPosition?</label>
+			<label kind="synchronisation" x="-170" y="51">reachExitPosition!</label>
 		</transition>
 		<transition>
 			<source ref="id10"/>
@@ -195,6 +193,7 @@ clock x;</declaration>
 			<target ref="id8"/>
 			<label kind="guard" x="-510" y="-34">maxPlatoonLength&lt;=1</label>
 			<label kind="synchronisation" x="-484" y="-51">cancel?</label>
+			<label kind="assignment" x="-510" y="-17">maxPlatoonLength=6</label>
 			<nail x="-306" y="-34"/>
 			<nail x="-578" y="-34"/>
 		</transition>
@@ -207,6 +206,7 @@ clock x;</declaration>
 			<source ref="id8"/>
 			<target ref="id9"/>
 			<label kind="synchronisation" x="-518" y="-187">requestToLeavePlatoon!</label>
+			<label kind="assignment" x="-560" y="-170">maxPlatoonLength--</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
