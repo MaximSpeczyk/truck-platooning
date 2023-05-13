@@ -5,13 +5,13 @@
 
 int[0,2] exitPosition;
 int maxPlatoonLength= 6;
-
-clock x;</declaration>
+int x;
+clock y;</declaration>
 	<template>
 		<name x="5" y="5">MasterTruck</name>
 		<declaration>// Place local declarations here.</declaration>
 		<location id="id0" x="-153" y="-289">
-			<name x="-163" y="-323">IDLE</name>
+			<name x="-163" y="-323">Leader</name>
 		</location>
 		<location id="id1" x="-153" y="-153">
 			<name x="-213" y="-145">waitingResponse</name>
@@ -98,6 +98,7 @@ clock x;</declaration>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
+			<label kind="guard" x="-153" y="-255">x&lt;=500</label>
 			<label kind="synchronisation" x="-153" y="-246">requestToLeavePlatoon?</label>
 			<label kind="assignment" x="-153" y="-221">maxPlatoonLength--</label>
 		</transition>
@@ -130,8 +131,8 @@ clock x;</declaration>
 		<location id="id15" x="-646" y="127">
 			<name x="-656" y="93">updatePlatoon</name>
 		</location>
-		<location id="id16" x="76" y="42">
-			<name x="93" y="42">decoupleTruck</name>
+		<location id="id16" x="68" y="42">
+			<name x="85" y="42">decoupleTruck</name>
 		</location>
 		<init ref="id8"/>
 		<transition>
@@ -144,7 +145,7 @@ clock x;</declaration>
 			<source ref="id16"/>
 			<target ref="id14"/>
 			<label kind="synchronisation" x="42" y="85">nominalSpace?</label>
-			<nail x="42" y="85"/>
+			<nail x="42" y="76"/>
 		</transition>
 		<transition>
 			<source ref="id13"/>
@@ -205,15 +206,47 @@ clock x;</declaration>
 		<transition>
 			<source ref="id8"/>
 			<target ref="id9"/>
+			<label kind="guard" x="-560" y="-204">x&lt;=500</label>
 			<label kind="synchronisation" x="-518" y="-187">requestToLeavePlatoon!</label>
 			<label kind="assignment" x="-560" y="-170">maxPlatoonLength--</label>
+		</transition>
+	</template>
+	<template>
+		<name>communnicationError</name>
+		<location id="id17" x="-187" y="-102">
+		</location>
+		<location id="id18" x="17" y="-110">
+			<name x="7" y="-144">V2VCommunication</name>
+		</location>
+		<location id="id19" x="-187" y="59">
+			<name x="-231" y="75">communicationError</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-76" y="-34">exitPosition == 0</label>
+			<label kind="synchronisation" x="-76" y="17">cancel!</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-187" y="-55">x&lt;=500</label>
+			<label kind="synchronisation" x="-187" y="-38">cancel!</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-110" y="-127">x&lt;=500</label>
+			<label kind="synchronisation" x="-161" y="-153">sendAcknowledgement!</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
 LeadTruck = MasterTruck();
 autoTruck1 = slaveTruck();
+communication = communnicationError();
 // List one or more processes to be composed into a system.
-system LeadTruck, autoTruck1;
+system LeadTruck, autoTruck1, communication;
     </system>
 	<queries>
 		<query>
