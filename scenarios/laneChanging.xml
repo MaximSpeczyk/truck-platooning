@@ -7,9 +7,9 @@ const int timeToChangeLane = 30; // Time before the leader initiates a lane chan
 const int laneChangeDuration = 10; // Time required for the leader to complete a lane change
 const int agentLaneChangeDuration = 12; // Time required for an agent to complete a lane change
 
-chan initiateLaneChange; // Channel for leader to initiate a lane change
-chan laneChangeCompleted; // Channel for leader to signal that the lane change is completed
-chan resumeCruising;</declaration>
+broadcast chan initiateLaneChange; // Channel for leader to initiate a lane change
+broadcast chan laneChangeCompleted; // Channel for leader to signal that the lane change is completed
+broadcast chan resumeCruising;</declaration>
 	<template>
 		<name x="5" y="5">LeaderVehicle</name>
 		<declaration>// Place local declarations here.
