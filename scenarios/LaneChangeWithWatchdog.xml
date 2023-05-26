@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N = 4; // Number of vehicles (1 leader + 3 agents)
+const int timeToChangeLane = 30; // Time before the leader initiates a lane change
+const int laneChangeDuration = 10; // Time required for the leader to complete a lane change
+const int agentLaneChangeDuration = 12; // Time required for an agent to complete a lane change
+
+broadcast chan initiateLaneChange, laneChangeCompleted,resumeCruising; // Channel for leader to initiate a lane change
+
+broadcast chan alarm; // Channel for the watchdog to raise an alarm
+
+
+</declaration>
+	<template>
+		<name x="5" y="5">LeaderVehicle</name>
+		<declaration>// Place local declarations here.
+clock t;</declaration>
+		<location id="id0" x="-127" y="-34">
+			<name x="-137" y="-68">Cruising</name>
+		</location>
+		<location id="id1" x="204" y="-34">
+			<name x="194" y="-68">changingLane</name>
+		</location>
+		<location id="id2" x="59" y="102">
+			<name x="49" y="68">laneChanged</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-144" y="17">resumeCruising!</label>
+			<label kind="assignment" x="-93" y="51">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="85" y="8">t &gt;= laneChangeDuration</label>
+			<label kind="synchronisation" x="85" y="25">laneChangeCompleted!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="17" y="-68">t &gt;= timeToChangeLane</label>
+			<label kind="synchronisation" x="-17" y="-51">initiateLaneChange!</label>
+			<label kind="assignment" x="17" y="-25">t = 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Watchdog</name>
+		<declaration>clock t;</declaration>
+		<location id="id3" x="-93" y="-76">
+			<name x="-103" y="-110">Monitoring</name>
+		</location>
+		<location id="id4" x="-93" y="110">
+			<name x="-103" y="76">Alarm</name>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-272" y="34">t &gt;= timeToChangeLane + laneChangeDuration + agentLaneChangeDuration</label>
+			<label kind="synchronisation" x="-85" y="-17">alarm!</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-212" y="-17">resumeCruising?</label>
+			<label kind="assignment" x="-85" y="8">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-161" y="-238">laneChangeCompleted?</label>
+			<label kind="assignment" x="-136" y="-153">t = 0</label>
+			<nail x="-178" y="-247"/>
+			<nail x="0" y="-247"/>
+		</transition>
+	</template>
+	<template>
+		<name>AgentVehicle</name>
+		<declaration>clock t;</declaration>
+		<location id="id5" x="-204" y="-17">
+			<name x="-214" y="-51">Following</name>
+		</location>
+		<location id="id6" x="34" y="-17">
+			<name x="24" y="-51">changingLane</name>
+		</location>
+		<location id="id7" x="-59" y="119">
+			<name x="-93" y="136">laneChanged</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-186" y="34">resumeCruising?</label>
+			<label kind="assignment" x="-186" y="51">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-51" y="59">t &gt;= agentLaneChangeDuration</label>
+			<label kind="synchronisation" x="-41" y="34">laneChangeCompleted?</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-161" y="-42">initiateLaneChange?</label>
+			<label kind="assignment" x="-110" y="-17">t = 0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+leadTruck =LeaderVehicle();
+autoTruck1 = AgentVehicle();
+autoTruck2 = AgentVehicle();
+watchdog = Watchdog();
+system leadTruck, autoTruck1 , autoTruck2, watchdog;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
