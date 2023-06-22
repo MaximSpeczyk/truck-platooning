@@ -273,12 +273,12 @@ watchdog_1 = Watchdog();
 
 platoon = Platoon();
 // List one or more processes to be composed into a system.
-system truck_1, truck_2, truck_3, platoon, watchdog_1;
+system truck_1, truck2, platoon, watchdog_1;
 //system watchdog_1;
     </system>
 	<queries>
 		<query>
-			<formula></formula>
+			<formula>A[] not deadlock</formula>
 			<comment></comment>
 		</query>
 	</queries>
