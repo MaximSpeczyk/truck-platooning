@@ -250,7 +250,7 @@ system LeadTruck, autoTruck1, communication;
     </system>
 	<queries>
 		<query>
-			<formula></formula>
+			<formula>A[] not deadlock</formula>
 			<comment></comment>
 		</query>
 	</queries>

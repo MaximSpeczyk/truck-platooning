@@ -92,7 +92,7 @@ system truckMasterOne, truckSlaveOne, truckSlaveTwo, truckSlaveThree, truckSlave
     </system>
 	<queries>
 		<query>
-			<formula></formula>
+			<formula>A[] not deadlock</formula>
 			<comment></comment>
 		</query>
 	</queries>
