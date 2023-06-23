@@ -273,7 +273,7 @@ watchdog_1 = Watchdog();
 
 platoon = Platoon();
 // List one or more processes to be composed into a system.
-system truck_1, truck2, platoon, watchdog_1;
+system truck_1, truck_2, platoon, watchdog_1;
 //system watchdog_1;
     </system>
 	<queries>
