@@ -7,9 +7,12 @@ const int timeToChangeLane = 30; // Time before the leader initiates a lane chan
 const int laneChangeDuration = 10; // Time required for the leader to complete a lane change
 const int agentLaneChangeDuration = 12; // Time required for an agent to complete a lane change
 
-broadcast chan initiateLaneChange; // Channel for leader to initiate a lane change
-broadcast chan laneChangeCompleted; // Channel for leader to signal that the lane change is completed
-broadcast chan resumeCruising;</declaration>
+broadcast chan initiateLaneChange, laneChangeCompleted,resumeCruising; // Channel for leader to initiate a lane change
+
+broadcast chan alarm; // Channel for the watchdog to raise an alarm
+
+
+</declaration>
 	<template>
 		<name x="5" y="5">LeaderVehicle</name>
 		<declaration>// Place local declarations here.
@@ -45,33 +48,64 @@ clock t;</declaration>
 		</transition>
 	</template>
 	<template>
-		<name>AgentVehicle</name>
+		<name>Watchdog</name>
 		<declaration>clock t;</declaration>
-		<location id="id3" x="-204" y="-17">
-			<name x="-214" y="-51">Following</name>
+		<location id="id3" x="-93" y="-76">
+			<name x="-103" y="-110">Monitoring</name>
 		</location>
-		<location id="id4" x="34" y="-17">
-			<name x="24" y="-51">changingLane</name>
-		</location>
-		<location id="id5" x="-59" y="119">
-			<name x="-93" y="136">laneChanged</name>
+		<location id="id4" x="-93" y="110">
+			<name x="-103" y="76">Alarm</name>
 		</location>
 		<init ref="id3"/>
 		<transition>
-			<source ref="id5"/>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-272" y="34">t &gt;= timeToChangeLane + laneChangeDuration + agentLaneChangeDuration</label>
+			<label kind="synchronisation" x="-85" y="-17">alarm!</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
 			<target ref="id3"/>
+			<label kind="synchronisation" x="-212" y="-17">resumeCruising?</label>
+			<label kind="assignment" x="-85" y="8">t = 0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-161" y="-238">laneChangeCompleted?</label>
+			<label kind="assignment" x="-136" y="-153">t = 0</label>
+			<nail x="-178" y="-247"/>
+			<nail x="0" y="-247"/>
+		</transition>
+	</template>
+	<template>
+		<name>AgentVehicle</name>
+		<declaration>clock t;</declaration>
+		<location id="id5" x="-204" y="-17">
+			<name x="-214" y="-51">Following</name>
+		</location>
+		<location id="id6" x="34" y="-17">
+			<name x="24" y="-51">changingLane</name>
+		</location>
+		<location id="id7" x="-59" y="119">
+			<name x="-93" y="136">laneChanged</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
 			<label kind="synchronisation" x="-186" y="34">resumeCruising?</label>
 			<label kind="assignment" x="-186" y="51">t = 0</label>
 		</transition>
 		<transition>
-			<source ref="id4"/>
-			<target ref="id5"/>
+			<source ref="id6"/>
+			<target ref="id7"/>
 			<label kind="guard" x="-51" y="59">t &gt;= agentLaneChangeDuration</label>
 			<label kind="synchronisation" x="-41" y="34">laneChangeCompleted?</label>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id4"/>
+			<source ref="id5"/>
+			<target ref="id6"/>
 			<label kind="synchronisation" x="-161" y="-42">initiateLaneChange?</label>
 			<label kind="assignment" x="-110" y="-17">t = 0</label>
 		</transition>
@@ -80,7 +114,8 @@ clock t;</declaration>
 leadTruck =LeaderVehicle();
 autoTruck1 = AgentVehicle();
 autoTruck2 = AgentVehicle();
-system leadTruck, autoTruck1 , autoTruck2;</system>
+watchdog = Watchdog();
+system leadTruck, autoTruck1 , autoTruck2, Watchdog;</system>
 	<queries>
 		<query>
 			<formula></formula>
